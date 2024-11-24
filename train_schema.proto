@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package train;
+
+option go_package = "./protobuf;train";
+
+message User {
+  string first_name = 1;
+  string last_name = 2;
+  string email = 3;
+}
+
+message SeatAllocation {
+  string section = 1;
+  int32 seat = 2;
+}
+
+message TicketReceipt {
+  User user = 1;
+  string from = 2;
+  string to = 3;
+  int32 price = 4;
+  SeatAllocation seat = 5;
+}
+
+message PurchaseTicketRequest {
+  User user = 1;
+  string from = 2;
+  string to = 3;
+}
+
+message UserRequest {
+  string email = 1;
+}
+
+message SectionRequest {
+  string section = 1;
+}
+
+message UsersResponse {
+  repeated User users = 1;
+}
+
+message ModifySeatRequest {
+  string email = 1;
+  string new_section = 2;
+  int32 new_seat = 3;
+}
+
+message EmptyResponse {}
+
+service TrainService {
+  rpc PurchaseTicket (PurchaseTicketRequest) returns (TicketReceipt);
+  rpc GetReceipt (UserRequest) returns (TicketReceipt);
+  rpc GetUsersBySection (SectionRequest) returns (UsersResponse);
+  rpc RemoveUser (UserRequest) returns (EmptyResponse);
+  rpc ModifyUserSeat (ModifySeatRequest) returns (TicketReceipt);
+}
